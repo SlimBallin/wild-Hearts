@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>0</ID>
+      <Description>"Wild Hearts v 1.2,2,(1.5,15.5)"</Description>
+      <Options moManualExpandCollapse="1"/>
+      <Color>00FFFF</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"xxxxxxxxxxxxxxxx"</Description>
+          <Options moManualExpandCollapse="1"/>
+          <Color>000000</Color>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"InF Health and Stanima"</Description>
+              <Options moManualExpandCollapse="1"/>
+              <Color>00FFFF</Color>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript Async="1">{ Game   : WILD HEARTS.exe | NHA's Cheat Engine Lua Library!
+  Version: 
+  Date   : 2023-02-22
+  Author : slimb
+
+  This script does blah blah blah
+}
+//48 85 C0 74 06 F3 0F 10 40 48 C3 0F 57 C0 C3 F6
+//48 85 C0 74 06 F3 0F 10 40 48 C3 0F 57 C0 C3 ''48'' unique
+//48 85 C0 74 06 F3 0F 10 40 48 C3 0F 57 C0 C3 ''48'' 8D 0C 24 48 81 C1 60 D7 2F 8C 4C 8B 89 A0 28 D0 73 48 8D 64 24 08 E9 10 76 E8 F4 4C 8B 14 24 48 8D 64
+//77 13 48 8B 84 C2 ?? ?? 00 00 48 85 C0 74 06 F3 0F 10 40 ?? C3 0F 57 C0 c3 ee
+
+[ENABLE]
+
+aobscanmodule(G_D_M_O_D_e,WILD HEARTS.exe,F3 0F 10 40 ?? C3 0F 57 C0 C3 47) // should be unique
+aobscanmodule(Sta_m,WILD HEARTS.exe,F3 41 0F 11 4A 44 48)
+alloc(newmem,$100,G_D_M_O_D_e)
+registersymbol(G_D_M_O_D_e Hel_th Sta_m inf_sTAM_Pointer)
+label(code)
+label(return)
+label(code2)
+label(return2)
+label(Hel_th)
+label(inf_sTAM_Pointer)
+
+
+newmem:
+
+Hel_th:
+dq 0
+
+inf_sTAM_Pointer:
+dq 0
+
+
+code:
+mov [Hel_th],rax
+  movss xmm0,[rax+40]//Max Health 'looping to [look below]
+movss [rax+48],xmm0  // Current Health for Inf HP
+jmp return // So we stay here
+
+
+code2:
+  mov [inf_sTAM_Pointer],r10
+movss xmm1,[r10+44] // mAX hEALTH AT oFFSET '40'
+movss [r10+44],xmm1 //cURRENT hEALTH OFFSET '44'
+//Looping max to Current with xmm1 for Infinite Health ththat allows increase.
+  jmp return2
+
+
+
+
+G_D_M_O_D_e:
+  jmp code
+return:
+
+Sta_m:
+  jmp code2
+  nop
+return2:
+
+
+[DISABLE]
+
+G_D_M_O_D_e:
+  db F3 0F 10 40 48
+
+ Sta_m:
+  db F3 41 0F 11 4A 44
+
+unregistersymbol(*)
+dealloc(*)
+
+
+//patch 1 2/19/2023
+{
+// ORIGINAL CODE - INJECTION POINT: WILD HEARTS.exe.ecode+126549C3
+
+WILD HEARTS.exe.ecode+12654999: 66 39 C8                 - cmp ax,cx
+WILD HEARTS.exe.ecode+1265499C: 77 2B                    - ja WILD HEARTS.exe.ecode+126549C9
+WILD HEARTS.exe.ecode+1265499E: 0F B7 C0                 - movzx eax,ax
+WILD HEARTS.exe.ecode+126549A1: 48 69 C8 98 03 00 00     - imul rcx,rax,00000398
+WILD HEARTS.exe.ecode+126549A8: 8B 84 11 48 12 18 00     - mov eax,[rcx+rdx+00181248]
+WILD HEARTS.exe.ecode+126549AF: 3D FC FF 02 00           - cmp eax,0002FFFC
+WILD HEARTS.exe.ecode+126549B4: 77 13                    - ja WILD HEARTS.exe.ecode+126549C9
+WILD HEARTS.exe.ecode+126549B6: 48 8B 84 C2 30 12 00 00  - mov rax,[rdx+rax*8+00001230]
+WILD HEARTS.exe.ecode+126549BE: 48 85 C0 74 06 F3 0F 10               - test rax,rax
+WILD HEARTS.exe.ecode+126549C1: 74 06                    - je WILD HEARTS.exe.ecode+126549C9
+// ---------- INJECTING HERE ----------
+WILD HEARTS.exe.ecode+126549C3: F3 0F 10 40 48           - movss xmm0,[rax+48]
+// ---------- DONE INJECTING  ----------
+WILD HEARTS.exe.ecode+126549C8: C3                       - ret
+WILD HEARTS.exe.ecode+126549C9: 0F 57 C0                 - xorps xmm0,xmm0
+WILD HEARTS.exe.ecode+126549CC: C3                       - ret
+WILD HEARTS.exe.ecode+126549CD: 67 23 F4                 - and esi,esp
+WILD HEARTS.exe.ecode+126549D0: 54                       - push rsp
+WILD HEARTS.exe.ecode+126549D1: 01 00                    - add [rax],eax
+WILD HEARTS.exe.ecode+126549D3: 00 00                    - add [rax],al
+WILD HEARTS.exe.ecode+126549D5: F9                       - stc
+WILD HEARTS.exe.ecode+126549D6: 4C 8B 14 24              - mov r10,[rsp]
+WILD HEARTS.exe.ecode+126549DA: 48 83 D4 07              - adc rsp,07
+}
+
+
+//Patch 2/22/2023
+{
+// ORIGINAL CODE - INJECTION POINT: WILD HEARTS.exe.rsrc+1223D573
+
+WILD HEARTS.exe.rsrc+1223D549: 66 39 C8                 - cmp ax,cx
+WILD HEARTS.exe.rsrc+1223D54C: 77 2B                    - ja WILD HEARTS.exe.rsrc+1223D579
+WILD HEARTS.exe.rsrc+1223D54E: 0F B7 C0                 - movzx eax,ax
+WILD HEARTS.exe.rsrc+1223D551: 48 69 C8 98 03 00 00     - imul rcx,rax,00000398
+WILD HEARTS.exe.rsrc+1223D558: 8B 84 11 48 12 18 00     - mov eax,[rcx+rdx+00181248]
+WILD HEARTS.exe.rsrc+1223D55F: 3D FC FF 02 00           - cmp eax,0002FFFC
+WILD HEARTS.exe.rsrc+1223D564: 77 13                    - ja WILD HEARTS.exe.rsrc+1223D579
+WILD HEARTS.exe.rsrc+1223D566: 48 8B 84 C2 30 12 00 00  - mov rax,[rdx+rax*8+00001230]
+WILD HEARTS.exe.rsrc+1223D56E: 48 85 C0                 - test rax,rax
+WILD HEARTS.exe.rsrc+1223D571: 74 06                    - je WILD HEARTS.exe.rsrc+1223D579
+// ---------- INJECTING HERE ----------
+WILD HEARTS.exe.rsrc+1223D573: F3 0F 10 40 48           - movss xmm0,[rax+48]
+// ---------- DONE INJECTING  ----------
+WILD HEARTS.exe.rsrc+1223D578: C3                       - ret 
+WILD HEARTS.exe.rsrc+1223D579: 0F 57 C0                 - xorps xmm0,xmm0
+WILD HEARTS.exe.rsrc+1223D57C: C3                       - ret 
+WILD HEARTS.exe.rsrc+1223D57D: 48 8D 0C 24              - lea rcx,[rsp]
+WILD HEARTS.exe.rsrc+1223D581: 48 81 C1 60 D7 2F 8C     - add rcx,FFFFFFFF8C2FD760
+WILD HEARTS.exe.rsrc+1223D588: 4C 8B 89 A0 28 D0 73     - mov r9,[rcx+73D028A0]
+WILD HEARTS.exe.rsrc+1223D58F: 48 8D 64 24 08           - lea rsp,[rsp+08]
+WILD HEARTS.exe.rsrc+1223D594: E9 10 76 E8 F4           - jmp WILD HEARTS.exe.rsrc+70C4BA9
+WILD HEARTS.exe.rsrc+1223D599: 4C 8B 14 24              - mov r10,[rsp]
+WILD HEARTS.exe.rsrc+1223D59D: 48 8D 64 24 08           - lea rsp,[rsp+08]
+}
+</AssemblerScript>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"AOB=0F 28 7C 24 30 F3 41 0F 11 4A ?? 48 8B 5C 24 50 current offset =&gt;"44""</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>00FFFF</Color>
+                  <VariableType>Array of byte</VariableType>
+                  <ByteLength>0</ByteLength>
+                  <Address>+44</Address>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>31</ID>
+                      <Description>"Stanima PTr"</Description>
+                      <Options moManualExpandCollapse="1"/>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>inf_sTAM_Pointer</Address>
+                      <Offsets>
+                        <Offset>0</Offset>
+                      </Offsets>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>33</ID>
+                          <Description>"Max Stanima"</Description>
+                          <Color>FF80FF</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>inf_sTAM_Pointer</Address>
+                          <Offsets>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>32</ID>
+                          <Description>"Current Stanima"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <Color>FF80FF</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>+44</Address>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"Health Ptr"</Description>
+                  <Options moManualExpandCollapse="1"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>Hel_th</Address>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"AOB=F3 0F 10 40 ?? C3 0F 57 C0 C3 47   current offset=&gt; ''48''"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>00FFFF</Color>
+                      <VariableType>Array of byte</VariableType>
+                      <ByteLength>0</ByteLength>
+                      <Address>0000000048</Address>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>38</ID>
+                          <Description>"Current Health"</Description>
+                          <Color>FF00FF</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>Hel_th</Address>
+                          <Offsets>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>37</ID>
+                          <Description>"Max Health"</Description>
+                          <Color>FF00FF</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>Hel_th</Address>
+                          <Offsets>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>125</ID>
+              <Description>"DisAble Camera [Player Free Move]"</Description>
+              <Color>4080FF</Color>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>{ Game   : WILD HEARTS.exe
+  Version: 
+  Date   : 2023-02-22
+  Author : slimb
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(Dis_Cam,WILD HEARTS.exe,0F 10 40 40 33 C0) // should be unique
+registersymbol(Dis_Cam)
+
+
+Dis_Cam:
+  db 90 90 90 90 33 C0
+
+
+[DISABLE]
+
+
+Dis_Cam:
+  db 0F 10 40 40 33 C0
+
+unregistersymbol(Dis_Cam)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: WILD HEARTS.exe.link+17EC541
+
+WILD HEARTS.exe.link+17EC537: 90                             - nop 
+WILD HEARTS.exe.link+17EC538: 90                             - nop 
+WILD HEARTS.exe.link+17EC539: 90                             - nop 
+WILD HEARTS.exe.link+17EC53A: 90                             - nop 
+WILD HEARTS.exe.link+17EC53B: 90                             - nop 
+WILD HEARTS.exe.link+17EC53C: 90                             - nop 
+WILD HEARTS.exe.link+17EC53D: 90                             - nop 
+WILD HEARTS.exe.link+17EC53E: 90                             - nop 
+WILD HEARTS.exe.link+17EC53F: 90                             - nop 
+WILD HEARTS.exe.link+17EC540: 90                             - nop 
+// ---------- INJECTING HERE ----------
+WILD HEARTS.exe.link+17EC541: 0F 10 40 40                    - movups xmm0,[rax+40]
+// ---------- DONE INJECTING  ----------
+WILD HEARTS.exe.link+17EC545: 33 C0                          - xor eax,eax
+WILD HEARTS.exe.link+17EC547: 0F 11 47 40                    - movups [rdi+40],xmm0
+WILD HEARTS.exe.link+17EC54B: F0 0F B1 4B 08                 - lock cmpxchg [rbx+08],ecx
+WILD HEARTS.exe.link+17EC550: 8B C8                          - mov ecx,eax
+WILD HEARTS.exe.link+17EC552: 0F 1F 40 00                    - nop dword ptr [rax+00]
+WILD HEARTS.exe.link+17EC556: 66 66 0F 1F 84 00 00 00 00 00  - nop word ptr [rax+rax+00000000]
+WILD HEARTS.exe.link+17EC560: 8B C1                          - mov eax,ecx
+WILD HEARTS.exe.link+17EC562: 0F BA F1 1F                    - btr ecx,1F
+WILD HEARTS.exe.link+17EC566: F0 0F B1 4B 08                 - lock cmpxchg [rbx+08],ecx
+WILD HEARTS.exe.link+17EC56B: 8B C8                          - mov ecx,eax
+}
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>204</ID>
+              <Description>"1 Hit Kill"</Description>
+              <Color>FFFF00</Color>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>{ Game   : WILD HEARTS.exe
+  Version: 
+  Date   : 2023-04-07
+  Author : slimb
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(AttaK_Dam,WILD HEARTS.exe,F3 0F 11 43 50 48 8B) // should be unique
+alloc(newmem,$1000,AttaK_Dam)
+
+label(code Ev_ty)
+label(return)
+
+newmem:
+
+code:
+mov [Ev_ty],rbx
+  mov [rbx+50],(float)9999999
+  jmp return
+
+Ev_ty:
+dq 0
+
+AttaK_Dam:
+  jmp newmem
+return:
+registersymbol(AttaK_Dam Ev_ty)
+
+[DISABLE]
+
+AttaK_Dam:
+  db F3 0F 11 43 50
+
+unregistersymbol(AttaK_Dam Ev_ty)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: WILD HEARTS.exe+13A6D328
+
+WILD HEARTS.exe+13A6D2F9: 8B 47 40                 - mov eax,[rdi+40]
+WILD HEARTS.exe+13A6D2FC: 4C 8D 4C 24 20           - lea r9,[rsp+20]
+WILD HEARTS.exe+13A6D301: 41 B0 01                 - mov r8b,01
+WILD HEARTS.exe+13A6D304: 89 44 24 24              - mov [rsp+24],eax
+WILD HEARTS.exe+13A6D308: 48 8D 54 24 24           - lea rdx,[rsp+24]
+WILD HEARTS.exe+13A6D30D: C7 44 24 20 FF FF FF FF  - mov [rsp+20],FFFFFFFF
+WILD HEARTS.exe+13A6D315: 48 8D 4C 24 30           - lea rcx,[rsp+30]
+WILD HEARTS.exe+13A6D31A: E8 51 08 1C F0           - call "WILD HEARTS.exe"+3C2DB70
+WILD HEARTS.exe+13A6D31F: 66 0F 6E 44 24 44        - movd xmm0,[rsp+44]
+WILD HEARTS.exe+13A6D325: 0F 5B C0                 - cvtdq2ps xmm0,xmm0
+// ---------- INJECTING HERE ----------
+WILD HEARTS.exe+13A6D328: F3 0F 11 43 50           - movss [rbx+50],xmm0
+// ---------- DONE INJECTING  ----------
+WILD HEARTS.exe+13A6D32D: 48 8B BC 24 B0 00 00 00  - mov rdi,[rsp+000000B0]
+WILD HEARTS.exe+13A6D335: 48 8B 9C 24 C0 00 00 00  - mov rbx,[rsp+000000C0]
+WILD HEARTS.exe+13A6D33D: 48 8B 8C 24 A0 00 00 00  - mov rcx,[rsp+000000A0]
+WILD HEARTS.exe+13A6D345: 48 31 E1                 - xor rcx,rsp
+WILD HEARTS.exe+13A6D348: E8 73 D8 25 EF           - call "WILD HEARTS.exe"+2CCABC0
+WILD HEARTS.exe+13A6D34D: 48 81 C4 B8 00 00 00     - add rsp,000000B8
+WILD HEARTS.exe+13A6D354: C3                       - ret 
+WILD HEARTS.exe+13A6D355: C7 43 50 00 00 00 00     - mov [rbx+50],00000000
+WILD HEARTS.exe+13A6D35C: EB D7                    - jmp "WILD HEARTS.exe"+13A6D335
+WILD HEARTS.exe+13A6D35E: CC                       - int 3 
+}
+</AssemblerScript>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>205</ID>
+                  <Description>"{USE FORGE] Swap Weapon "</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>4080FF</Color>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>Ev_ty</Address>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>206</ID>
+                      <Description>"OnE Hit Kill =&gt;"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">9999999:ON
+</DropDownList>
+                      <Color>80FF00</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>Ev_ty</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>184</ID>
+      <Description>"Forge Menu lua attempt"</Description>
+      <Options moManualExpandCollapse="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+if syntaxcheck then return end
+
+local Giv_Me_Son = AOBScanModuleUnique("WILD HEARTS.exe","0F B7 48 04 3B F9")
+
+registerSymbol("Giv_Me_Son",Giv_Me_Son)
+local Giv_Me = allocateMemory(8,Giv_Me_Son)
+registerSymbol("Giv_Me",Giv_Me)
+
+
+
+local var_bytes_to_write = {0x48,0xA3,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}
+local var_addy_calc = Giv_Me
+
+
+writeBytes(var_addy_calc, var_bytes_to_write)
+WritePointer(var_addy_calc+0x02,var_addy_calc+0x19)
+var_addy_calc = var_addy_calc + #var_bytes_to_write
+var_bytes_to_write = {0x66, 0xB9, 0x99, 0x09}
+writeBytes(var_addy_calc, var_bytes_to_write)
+var_addy_calc = var_addy_calc + #var_bytes_to_write
+var_bytes_to_write = {0x66, 0x89, 0x48, 0x04}
+writeBytes(var_addy_calc, var_bytes_to_write)
+var_addy_calc = var_addy_calc + #var_bytes_to_write
+var_bytes_to_write = {0x39, 0xCF}
+writeBytes(var_addy_calc, var_bytes_to_write)
+var_addy_calc = var_addy_calc + #var_bytes_to_write
+var_bytes_to_write = {0xE9, 0x00,0x00,0x00,0x00}
+writeBytes(var_addy_calc, var_bytes_to_write)
+WriteInteger(var_addy_calc+0x01,NHA_CE.CreateCBUFF(Giv_Me_Son+0x06,var_addy_calc,0x05)     )
+printf (NHA_CE.HEX.GetAddress(Giv_Me))
+
+
+{$ASM}
+
+[DisABLE]
+unregisterSymbol(*)
+deAlloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: WILD HEARTS.exe+39B2B18
+
+WILD HEARTS.exe+39B2AF3: 74 0F                 - je "WILD HEARTS.exe"+39B2B04
+WILD HEARTS.exe+39B2AF5: 49 8D 41 08           - lea rax,[r9+08]
+WILD HEARTS.exe+39B2AF9: 48 8B D0              - mov rdx,rax
+WILD HEARTS.exe+39B2AFC: 4C 8B C8              - mov r9,rax
+WILD HEARTS.exe+39B2AFF: 48 3B C1              - cmp rax,rcx
+WILD HEARTS.exe+39B2B02: 75 EC                 - jne "WILD HEARTS.exe"+39B2AF0
+WILD HEARTS.exe+39B2B04: 48 8D 8D D8 00 00 00  - lea rcx,[rbp+000000D8]
+WILD HEARTS.exe+39B2B0B: 4A 8D 0C D9           - lea rcx,[rcx+r11*8]
+WILD HEARTS.exe+39B2B0F: 48 3B D1              - cmp rdx,rcx
+WILD HEARTS.exe+39B2B12: 0F 84 70 01 00 00     - je "WILD HEARTS.exe"+39B2C88
+// ---------- INJECTING HERE ----------
+WILD HEARTS.exe+39B2B18: 0F B7 48 04           - movzx ecx,word ptr [rax+04]
+// ---------- DONE INJECTING  ----------
+WILD HEARTS.exe+39B2B1C: 3B F9                 - cmp edi,ecx
+WILD HEARTS.exe+39B2B1E: 0F 87 64 01 00 00     - ja "WILD HEARTS.exe"+39B2C88
+WILD HEARTS.exe+39B2B24: 66 2B CF              - sub cx,di
+WILD HEARTS.exe+39B2B27: 66 89 48 04           - mov [rax+04],cx
+WILD HEARTS.exe+39B2B2B: 75 83                 - jne "WILD HEARTS.exe"+39B2AB0
+WILD HEARTS.exe+39B2B2D: 49 8B 80 40 1F 00 00  - mov rax,[r8+00001F40]
+WILD HEARTS.exe+39B2B34: 4D 8D 0C C0           - lea r9,[r8+rax*8]
+WILD HEARTS.exe+39B2B38: 48 8D 4A 08           - lea rcx,[rdx+08]
+WILD HEARTS.exe+39B2B3C: 49 3B C9              - cmp rcx,r9
+WILD HEARTS.exe+39B2B3F: 74 1D                 - je "WILD HEARTS.exe"+39B2B5E
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>185</ID>
+          <Description>"ptr"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>0</ByteLength>
+          <Address>Giv_Me</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>176</ID>
+      <Description>"Pick Up Multiplyer x99"</Description>
+      <Color>FFFF00</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{ Game   : WILD HEARTS.exe | NHA's Cheat Engine Lua Library!
+  Version: 
+  Date   : 2023-03-26
+  Author : slimb
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(PKI,WILD HEARTS.exe,66 44 89 73 04) // should be unique
+alloc(newmem,$10,PKI)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rbx+04],999
+  jmp return
+
+PKI:
+  jmp code
+return:
+registersymbol(PKI)
+
+[DISABLE]
+
+PKI:
+  db 66 44 89 73 04
+
+unregistersymbol(PKI)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: WILD HEARTS.exe+39B33AF
+
+WILD HEARTS.exe+39B338B: 41 8B 07              - mov eax,[r15]
+WILD HEARTS.exe+39B338E: 89 45 CB              - mov [rbp-35],eax
+WILD HEARTS.exe+39B3391: 48 8D 55 CB           - lea rdx,[rbp-35]
+WILD HEARTS.exe+39B3395: 49 8B CD              - mov rcx,r13
+WILD HEARTS.exe+39B3398: E8 B3 EC FF FF        - call "WILD HEARTS.exe"+39B2050
+WILD HEARTS.exe+39B339D: 66 89 43 04           - mov [rbx+04],ax
+WILD HEARTS.exe+39B33A1: EB 32                 - jmp "WILD HEARTS.exe"+39B33D5
+WILD HEARTS.exe+39B33A3: 40 32 F6              - xor sil,sil
+WILD HEARTS.exe+39B33A6: E9 77 FF FF FF        - jmp "WILD HEARTS.exe"+39B3322
+WILD HEARTS.exe+39B33AB: 66 44 03 F7           - add r14w,di
+// ---------- INJECTING HERE ----------
+WILD HEARTS.exe+39B33AF: 66 44 89 73 04        - mov [rbx+04],r14w
+// ---------- DONE INJECTING  ----------
+WILD HEARTS.exe+39B33B4: EB 1F                 - jmp "WILD HEARTS.exe"+39B33D5
+WILD HEARTS.exe+39B33B6: 48 81 FA E8 03 00 00  - cmp rdx,000003E8
+WILD HEARTS.exe+39B33BD: 74 16                 - je "WILD HEARTS.exe"+39B33D5
+WILD HEARTS.exe+39B33BF: 48 85 C9              - test rcx,rcx
+WILD HEARTS.exe+39B33C2: 74 0A                 - je "WILD HEARTS.exe"+39B33CE
+WILD HEARTS.exe+39B33C4: 89 01                 - mov [rcx],eax
+WILD HEARTS.exe+39B33C6: 66 44 89 71 04        - mov [rcx+04],r14w
+WILD HEARTS.exe+39B33CB: 49 8B 12              - mov rdx,[r10]
+WILD HEARTS.exe+39B33CE: 48 8D 42 01           - lea rax,[rdx+01]
+WILD HEARTS.exe+39B33D2: 49 89 02              - mov [r10],rax
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>207</ID>
+      <Description>"No description"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Custom</VariableType>
+      <CustomType>4 Byte Big Endian</CustomType>
+      <Address>02CEAE08</Address>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols>
+    <SymbolEntry>
+      <Name>PE_SEGMENTS</Name>
+      <Address>140000250</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>Giv_Me_Son</Name>
+      <Address>1439D8F38</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>Giv_Me</Name>
+      <Address>13FFD0000</Address>
+    </SymbolEntry>
+  </UserdefinedSymbols>
+</CheatTable>

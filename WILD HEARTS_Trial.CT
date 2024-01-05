@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>146</ID>
+      <Description>"Weapon Damage Reader/Setter  [READ EACH LINE! IF YOU FAIL TO READ IT WON'T WORK!]"</Description>
+      <Options moManualExpandCollapse="1"/>
+      <Color>0000FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript Async="1">{ Game   : WILD HEARTS.exe
+  Version: 
+  Date   : 2023-02-24
+  Author : slimb
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(Attk_Damage,WILD HEARTS_Trial.exe,41 C7 42 50 00 00 00 00) // should be unique
+alloc(newmem,$100,Attk_Damage)
+
+label(code rno)
+label(return)
+
+newmem:
+
+code:
+mov [rno],r10
+  mov [r10+50],(float)99999999
+  jmp return
+
+rno:
+dq 0
+
+Attk_Damage:
+  jmp code
+  nop 4
+return:
+registersymbol(Attk_Damage rno)
+
+[DISABLE]
+
+Attk_Damage:
+  db 41 C7 42 50 00 00 00 00
+
+unregistersymbol(Attk_Damage rno)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: WILD HEARTS.exe.rsrc+12630256
+
+WILD HEARTS.exe.rsrc+12630232: 48 01 C2                 - add rdx,rax
+WILD HEARTS.exe.rsrc+12630235: 49 39 D1                 - cmp r9,rdx
+WILD HEARTS.exe.rsrc+12630238: 73 1C                    - jae WILD HEARTS.exe.rsrc+12630256
+WILD HEARTS.exe.rsrc+1263023A: 49 69 C1 A4 00 00 00     - imul rax,r9,000000A4
+WILD HEARTS.exe.rsrc+12630241: 4C 01 C0                 - add rax,r8
+WILD HEARTS.exe.rsrc+12630244: 74 10                    - je WILD HEARTS.exe.rsrc+12630256
+WILD HEARTS.exe.rsrc+12630246: F3 41 0F 11 42 50        - movss [r10+50],xmm0
+WILD HEARTS.exe.rsrc+1263024C: 41 0F 11 42 50           - movups [r10+50],xmm0
+WILD HEARTS.exe.rsrc+12630251: 48 83 C4 28              - add rsp,28
+WILD HEARTS.exe.rsrc+12630255: C3                       - ret 
+// ---------- INJECTING HERE ----------
+WILD HEARTS.exe.rsrc+12630256: 0F 57 C0                 - xorps xmm0,xmm0
+// ---------- DONE INJECTING  ----------
+WILD HEARTS.exe.rsrc+12630259: F3 41 0F 11 42 50        - movss [r10+50],xmm0
+WILD HEARTS.exe.rsrc+1263025F: 48 83 C4 28              - add rsp,28
+WILD HEARTS.exe.rsrc+12630263: C3                       - ret 
+WILD HEARTS.exe.rsrc+12630264: 41 C7 42 50 00 00 00 00  - mov [r10+50],00000000
+WILD HEARTS.exe.rsrc+1263026C: 48 83 C4 28              - add rsp,28
+WILD HEARTS.exe.rsrc+12630270: C3                       - ret 
+WILD HEARTS.exe.rsrc+12630271: CC                       - int 3 
+WILD HEARTS.exe.rsrc+12630272: 00 00                    - add [rax],al
+WILD HEARTS.exe.rsrc+12630274: 00 00                    - add [rax],al
+WILD HEARTS.exe.rsrc+12630276: 00 00                    - add [rax],al
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>147</ID>
+          <Description>"Swap your Weapon, Your Damage will appear below. "</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <Color>4080FF</Color>
+          <VariableType>8 Bytes</VariableType>
+          <Address>rno</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>149</ID>
+              <Description>"Exit Forge and Change Damage value to whatever.  [Damage Valve=&gt;]"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">99999999:MKX
+</DropDownList>
+              <Color>40FF00</Color>
+              <VariableType>Float</VariableType>
+              <Address>rno</Address>
+              <Offsets>
+                <Offset>50</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>186</ID>
+      <Description>"InF stanima"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript Async="1">{ Game   : WILD HEARTS_Trial.exe | NHA's Cheat Engine Lua Library!
+  Version: 
+  Date   : 2023-04-05
+  Author : slimb
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(Stan,WILD HEARTS_Trial.exe,F3 41 0F 11 4A 44 48) // should be unique
+alloc(newmem,$20,Stan)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [r10+44],(float)99999999
+  jmp return
+
+Stan:
+  jmp code
+  nop
+return:
+registersymbol(Stan)
+
+[DISABLE]
+
+Stan:
+  db F3 41 0F 11 4A 44
+
+unregistersymbol(Stan)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: WILD HEARTS_Trial.exe+3AD541C
+
+WILD HEARTS_Trial.exe+3AD53F8: 44 0F 2F CA           - comiss xmm9,xmm2
+WILD HEARTS_Trial.exe+3AD53FC: 77 09                 - ja "WILD HEARTS_Trial.exe"+3AD5407
+WILD HEARTS_Trial.exe+3AD53FE: 0F 2F 15 A7 8B 12 02  - comiss xmm2,["WILD HEARTS_Trial.exe"+5BFDFAC]
+WILD HEARTS_Trial.exe+3AD5405: 76 03                 - jna "WILD HEARTS_Trial.exe"+3AD540A
+WILD HEARTS_Trial.exe+3AD5407: 0F 28 E7              - movaps xmm4,xmm7
+WILD HEARTS_Trial.exe+3AD540A: F3 0F 5F CC           - maxss xmm1,xmm4
+WILD HEARTS_Trial.exe+3AD540E: EB 07                 - jmp "WILD HEARTS_Trial.exe"+3AD5417
+WILD HEARTS_Trial.exe+3AD5410: F3 0F 5F EB           - maxss xmm5,xmm3
+WILD HEARTS_Trial.exe+3AD5414: 0F 28 CD              - movaps xmm1,xmm5
+WILD HEARTS_Trial.exe+3AD5417: 0F 28 7C 24 30        - movaps xmm7,[rsp+30]
+// ---------- INJECTING HERE ----------
+WILD HEARTS_Trial.exe+3AD541C: F3 41 0F 11 4A 44     - movss [r10+44],xmm1
+// ---------- DONE INJECTING  ----------
+WILD HEARTS_Trial.exe+3AD5422: 48 8B 5C 24 50        - mov rbx,[rsp+50]
+WILD HEARTS_Trial.exe+3AD5427: 44 0F 28 4C 24 20     - movaps xmm9,[rsp+20]
+WILD HEARTS_Trial.exe+3AD542D: 48 83 C4 58           - add rsp,58
+WILD HEARTS_Trial.exe+3AD5431: C3                    - ret 
+WILD HEARTS_Trial.exe+3AD5432: CC                    - int 3 
+WILD HEARTS_Trial.exe+3AD5433: CC                    - int 3 
+WILD HEARTS_Trial.exe+3AD5434: CC                    - int 3 
+WILD HEARTS_Trial.exe+3AD5435: CC                    - int 3 
+WILD HEARTS_Trial.exe+3AD5436: CC                    - int 3 
+WILD HEARTS_Trial.exe+3AD5437: CC                    - int 3 
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>192</ID>
+      <Description>"Infinite Health"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript Async="1">{ Game   : WILD HEARTS_Trial.exe | NHA's Cheat Engine Lua Library!
+  Version: 
+  Date   : 2023-04-05
+  Author : slimb
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(Healh,WILD HEARTS_Trial.exe,F3 0F 10 40 ?? C3 0F 57 C0 C3 1C) // should be unique
+alloc(newmem,$20,Healh)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [rax+48],(float)9999999
+  jmp return
+
+Healh:
+  jmp code
+return:
+registersymbol(Healh)
+
+[DISABLE]
+
+Healh:
+  db F3 0F 10 40 48
+
+unregistersymbol(Healh)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: WILD HEARTS_Trial.exe+1BCC6B23
+
+WILD HEARTS_Trial.exe+1BCC6AF9: 66 39 C8                 - cmp ax,cx
+WILD HEARTS_Trial.exe+1BCC6AFC: 77 2B                    - ja "WILD HEARTS_Trial.exe"+1BCC6B29
+WILD HEARTS_Trial.exe+1BCC6AFE: 0F B7 C0                 - movzx eax,ax
+WILD HEARTS_Trial.exe+1BCC6B01: 48 69 C8 9C 03 00 00     - imul rcx,rax,0000039C
+WILD HEARTS_Trial.exe+1BCC6B08: 8B 84 11 50 12 18 00     - mov eax,[rcx+rdx+00181250]
+WILD HEARTS_Trial.exe+1BCC6B0F: 3D FC FF 02 00           - cmp eax,0002FFFC
+WILD HEARTS_Trial.exe+1BCC6B14: 77 13                    - ja "WILD HEARTS_Trial.exe"+1BCC6B29
+WILD HEARTS_Trial.exe+1BCC6B16: 48 8B 84 C2 38 12 00 00  - mov rax,[rdx+rax*8+00001238]
+WILD HEARTS_Trial.exe+1BCC6B1E: 48 85 C0                 - test rax,rax
+WILD HEARTS_Trial.exe+1BCC6B21: 74 06                    - je "WILD HEARTS_Trial.exe"+1BCC6B29
+// ---------- INJECTING HERE ----------
+WILD HEARTS_Trial.exe+1BCC6B23: F3 0F 10 40 48           - movss xmm0,[rax+48]
+// ---------- DONE INJECTING  ----------
+WILD HEARTS_Trial.exe+1BCC6B28: C3                       - ret 
+WILD HEARTS_Trial.exe+1BCC6B29: 0F 57 C0                 - xorps xmm0,xmm0
+WILD HEARTS_Trial.exe+1BCC6B2C: C3                       - ret 
+WILD HEARTS_Trial.exe+1BCC6B2D: 1C A9                    - sbb al,-57
+WILD HEARTS_Trial.exe+1BCC6B2F: 3D FB 00 00 00           - cmp eax,000000FB
+WILD HEARTS_Trial.exe+1BCC6B34: 00 C1                    - add cl,al
+WILD HEARTS_Trial.exe+1BCC6B36: 77 9F                    - ja "WILD HEARTS_Trial.exe"+1BCC6AD7
+WILD HEARTS_Trial.exe+1BCC6B38: 74 C3                    - je "WILD HEARTS_Trial.exe"+1BCC6AFD
+WILD HEARTS_Trial.exe+1BCC6B3A: C0 0D 20 30 2F A4 5A     - ror byte ptr [FFFB9B61],5A
+WILD HEARTS_Trial.exe+1BCC6B41: 01 00                    - add [rax],eax
+}
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
